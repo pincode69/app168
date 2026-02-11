@@ -1,98 +1,121 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
+import { ListIcon } from '@/components/icons/list';
+import { StarIcon } from '@/components/icons/star';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { useRouter } from 'expo-router';
+import {
+  Image,
+  ImageBackground,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function HomeScreen() {
+  const router = useRouter();
+  
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <ImageBackground
+      source={require('@/assets/images/content/bg.png')}
+      style={styles.background}
+      resizeMode="cover"
+    >
+      
+      <SafeAreaProvider style={styles.container}>
+        <Image source={require('@/assets/images/content/title-chains.png')} style={styles.logo} />
+        <ScrollView
+          contentContainerStyle={{gap: 16, paddingHorizontal: 16, paddingTop: 20, paddingBottom: 80}}
+        >
+          {[...Array(25)].map((_, index) => (
+            <ThemedView style={styles.btnCover} key={index}>
+              <TouchableOpacity style={styles.btn} onPress={() => { router.push(`/(tabs)/level/level-${index+1}`) }}>
+                <ThemedText type="title" style={styles.btnText}>Play ‘Level {index+1}’</ThemedText>
+                <ThemedView style={styles.icon}>
+                  <Image source={require('@/assets/images/content/button-bg.png')} style={styles.btnBg} />
+                  <ThemedText style={styles.text}>{index+1}</ThemedText>
+                </ThemedView>
+              </TouchableOpacity>
+            </ThemedView>
+          ))}
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+          <ThemedView style={styles.btnCover}>
+            <TouchableOpacity style={styles.btn} onPress={() => { router.push('/(tabs)/rules') }}>
+              <ThemedText type="title" style={styles.btnText}>Game Rules</ThemedText>
+              <ThemedView style={styles.icon}>
+                <Image source={require('@/assets/images/content/button-bg.png')} style={styles.btnBg} />
+                <ListIcon />
+              </ThemedView>
+            </TouchableOpacity>
+          </ThemedView>
+
+          <ThemedView style={styles.btnCover}>
+            <TouchableOpacity style={styles.btn} onPress={() => { router.push('/(tabs)/top') }}>
+              <ThemedText type="title" style={styles.btnText}>Top Score</ThemedText>
+              <ThemedView style={styles.icon}>
+                <Image source={require('@/assets/images/content/button-bg.png')} style={styles.btnBg} />
+                <StarIcon />
+              </ThemedView>
+            </TouchableOpacity>
+          </ThemedView>
+        </ScrollView>
+      </SafeAreaProvider>
+    </ImageBackground>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  container: {
+    flex: 1,
+  },
+  background: {
+    flex: 1,
+    width: '100%',
+    position: 'relative',
+  },
+  safeContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: 16
+  },
+
+  logo: {
+    resizeMode: 'contain',
+    width: '100%',
+  },
+  btnCover: {
+    backgroundColor: 'white',
+    borderRadius: 20,
+    padding: 4,
+  },
+  btn: {
+    backgroundColor: 'rgba(47, 167, 36, 1)',
+    borderColor: 'rgba(81, 81, 81, 1)',
+    borderWidth: 2,
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 8,
+    justifyContent: 'space-between',
+    width: '100%',
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  btnText: {
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  icon: {
+    position: 'relative',
+    width: 64,
+    height: 64,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  btnBg: {
     position: 'absolute',
   },
+  text: {
+    color: '#3C3C3C',
+    fontSize: 30,
+    fontFamily: 'PoppinsBold',
+    lineHeight: 64,
+  }
 });
