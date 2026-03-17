@@ -141,12 +141,12 @@ workflows:
           include: true
     environment:
       android_signing:
-        - codemagic_keystore # Reference name from Codemagic dashboard
+        - app168keystore
       vars:
         APP_FLAVOR: android-black
         BUILD_ENV: production
-        PACKAGE_NAME: "com.noir.scarlet" # Example: com.your.app.package
-      node: 18
+        PACKAGE_NAME: "com.runway726roadeo.runwayroadeo"
+      node: 20
       java: 17
     scripts:
       - *common_scripts
